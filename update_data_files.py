@@ -8,21 +8,22 @@ from pathlib import Path
 # Series: CUUR0000SA0L1E - CPI Core (all items less food and energy)
 # https://beta.bls.gov/dataViewer/view/timeseries/CUUR0000SA0L1E
 
+# Series: CUSR0000SA0 - CPI All Items [seasonally adjusted]
+# https://beta.bls.gov/dataViewer/view/timeseries/CUSR0000SA0
+
+# Series: CUSR0000SA0L1E - CPI Core (all items less food and energy) [seasonally adjusted]
+# https://beta.bls.gov/dataViewer/view/timeseries/CUSR0000SA0L1E
+
 inputDir = './cpi'
 outputDir = './data'
-serieses = ['CUUR0000SA0','CUUR0000SA0L1E']
-filenameMap = {'CUUR0000SA0': 'inflation-all-items', 'CUUR0000SA0L1E': 'inflation-core'}
+serieses = ['CUUR0000SA0','CUUR0000SA0L1E', 'CUSR0000SA0', 'CUSR0000SA0L1E']
+filenameMap = {'CUUR0000SA0': 'inflation-all-items', 'CUUR0000SA0L1E': 'inflation-core', 'CUSR0000SA0': 'inflation-all-items-adj', 'CUSR0000SA0L1E': 'inflation-core-adj'}
 
 # check if output data folder exists
 outputDir_exists = Path(outputDir).exists()
 if not outputDir_exists:
     print("Exit: output data folder does not exist (./data)")
     sys.exit()
-
-## clean data folder
-#path = Path(outputDir)
-#path_list = path.glob("*.csv")
-#[f.unlink() for f in path_list if f.is_file()]
 
 # check if input data folder exists
 inputDir_exists = Path(inputDir).exists()
@@ -66,7 +67,6 @@ for seriesId in serieses:
 
     df.drop(df.tail(12).index, inplace = True)    
 
-
     # Save YoY data
     column_names = ['date', 'inflation']  # desired column names in csv
     column_df = ['dateStr', 'inflationYoYNorm'] # column names in corresponding DataFrame
@@ -82,8 +82,5 @@ for seriesId in serieses:
     f_ = Path(filename)
     if f_.exists(): f_.unlink()
     df.to_csv(filename, index=False, header=column_names, columns=column_df)
-
-
-    #print(df)
 
 print("Done!")
