@@ -27,7 +27,7 @@ path_list = path.glob("*.csv")
 # get CPI data from BLS site
 print("Getting data from BLS website...")
 headers = {'Content-type': 'application/json'}
-data = json.dumps({"seriesid": serieses,"startyear":"2001", "endyear":"2023"})
+data = json.dumps({"seriesid": serieses,"startyear":"2013", "endyear":"2023"})
 
 p = requests.post('https://api.bls.gov/publicAPI/v2/timeseries/data/', data=data, headers=headers)
 json_data = json.loads(p.text)
