@@ -46,24 +46,24 @@ for seriesId in serieses:
     df_orig = pd.read_csv(input_filepath)
     df = df_orig[::-1].reset_index(drop=True)  # reverse dataframe
 
-    df['Value'] = pd.to_numeric(df['Value'])
+    df['value'] = pd.to_numeric(df['value'])
 
-    df['valueYearAgo'] = df['Value'].shift(-12)
+    df['valueYearAgo'] = df['value'].shift(-12)
     df['valueYearAgo'] = pd.to_numeric(df['valueYearAgo'])
     df['valueYearAgo'].fillna(value=999, inplace=True)
 
-    df['valueMonthAgo'] = df['Value'].shift(-1)
+    df['valueMonthAgo'] = df['value'].shift(-1)
     df['valueMonthAgo'] = pd.to_numeric(df['valueMonthAgo'])
     df['valueMonthAgo'].fillna(value=999, inplace=True)
 
 
-    df['inflationYoYRaw']= df['Value'] / df['valueYearAgo']
+    df['inflationYoYRaw']= df['value'] / df['valueYearAgo']
     df['inflationYoYNorm']= ((df['inflationYoYRaw'] - 1)*100).round(1)
 
-    df['inflationMoMRaw']= df['Value'] / df['valueMonthAgo']
+    df['inflationMoMRaw']= df['value'] / df['valueMonthAgo']
     df['inflationMoMNorm']= ((df['inflationMoMRaw'] - 1)*100).round(1)
 
-    df['dateStr'] = df['Year'].astype(str) + '-' + df['Period'].str[1:]
+    df['dateStr'] = df['year'].astype(str) + '-' + df['period'].str[1:]
 
     df.drop(df.tail(12).index, inplace = True)    
 
