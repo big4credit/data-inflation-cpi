@@ -51,7 +51,8 @@ for series in json_data['Results']['series']:
   
     # manipulate BLS dataframe
     df_bls = pd.json_normalize(series, record_path=['data'])
-    df_bls = df_bls.drop(columns=['periodName', 'latest', 'footnotes'])  # drop unnecessary columns
+    df_bls = df_bls.drop(columns=['periodName', 'footnotes'])  # drop unnecessary columns
+    #df_bls = df_bls.drop(columns=['periodName', 'latest', 'footnotes'])  # drop unnecessary columns
     df_bls['seriesId'] = seriesId  # add column with default value equal seriesId
     df_bls['year'] = df_bls['year'].astype('int')  # convert to int64
     df_bls['value'] = df_bls['value'].astype('float')  # convert to float64
