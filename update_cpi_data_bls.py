@@ -4,7 +4,7 @@ from datetime import datetime
 
 import requests
 import json
-import prettytable
+#import prettytable
 import pandas as pd
 import numpy as np
 
