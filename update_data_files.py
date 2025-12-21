@@ -46,22 +46,27 @@ for seriesId in serieses:
     df_orig = pd.read_csv(input_filepath)
     df = df_orig[::-1].reset_index(drop=True)  # reverse dataframe
 
+    # we assign None to Oct 2025 value; it is filled with '-' in the input_filepath
+    df.loc[(df["year"] == 2025) & (df["period"] == 'M10'), "value"] = None
+    
     df['value'] = pd.to_numeric(df['value'])
 
     df['valueYearAgo'] = df['value'].shift(-12)
     df['valueYearAgo'] = pd.to_numeric(df['valueYearAgo'])
-    df['valueYearAgo'].fillna(value=999, inplace=True)
+    #df['valueYearAgo'].fillna(value=999, inplace=True)
 
     df['valueMonthAgo'] = df['value'].shift(-1)
     df['valueMonthAgo'] = pd.to_numeric(df['valueMonthAgo'])
-    df['valueMonthAgo'].fillna(value=999, inplace=True)
+    #df['valueMonthAgo'].fillna(value=999, inplace=True)
 
 
     df['inflationYoYRaw']= df['value'] / df['valueYearAgo']
     df['inflationYoYNorm']= ((df['inflationYoYRaw'] - 1)*100).round(1)
+    #df.fillna({'inflationYoYNorm': '-'}, inplace=True)
 
     df['inflationMoMRaw']= df['value'] / df['valueMonthAgo']
     df['inflationMoMNorm']= ((df['inflationMoMRaw'] - 1)*100).round(1)
+    #df.fillna({'inflationMoMNorm': '-'}, inplace=True)
 
     df['dateStr'] = df['year'].astype(str) + '-' + df['period'].str[1:]
 

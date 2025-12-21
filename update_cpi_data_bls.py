@@ -55,7 +55,8 @@ for series in json_data['Results']['series']:
     #df_bls = df_bls.drop(columns=['periodName', 'latest', 'footnotes'])  # drop unnecessary columns
     df_bls['seriesId'] = seriesId  # add column with default value equal seriesId
     df_bls['year'] = df_bls['year'].astype('int')  # convert to int64
-    df_bls['value'] = df_bls['value'].astype('float')  # convert to float64
+    # commented below because df_bls['value'] is '-' for Oct 2025
+    #df_bls['value'] = df_bls['value'].astype('float')  # convert to float64
 
     print("  Reading input data file...")
     input_filepath = fileDir + '/' + seriesId + '.csv'
@@ -69,6 +70,9 @@ for series in json_data['Results']['series']:
     df_xcheck = df_csv.merge(df_bls, on=['seriesId', 'year', 'period'], how='inner')
     # value_x is CSV
     # value_y is BLS
+    df_xcheck = df_xcheck[~((df_xcheck['year'] == 2025) & (df_xcheck['period'] == "M10"))]  # drop Oct 2025 from cross-check (value is '-')
+    df_xcheck['value_x'] = df_xcheck['value_x'].astype('float')  # convert to float64 to make comparison below
+    df_xcheck['value_y'] = df_xcheck['value_y'].astype('float')  # convert to float64 to make comparison below
     df_xcheck['equal'] = np.isclose(df_xcheck['value_x'], df_xcheck['value_y'])
 
     # Save data to CSV
